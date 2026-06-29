@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Review</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        #overviewArea {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            min-height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>University Review</h1>
+        
+        <label for="universitySelect">Select a University:</label>
+        <select id="universitySelect">
+            <option value="">-- Choose a University --</option>
+            <option value="Exeter">Exeter</option>
+            <option value="Loughborough">Loughborough</option>
+        </select>
+        
+        <div id="overviewArea">
+            Select a university to view its overview.
+        </div>
+    </div>
+
+    <script>
+        const universities = ['Exeter', 'Loughborough'];
+        
+        document.getElementById('universitySelect').addEventListener('change', function() {
+            const selectedUni = this.value;
+            const overviewArea = document.getElementById('overviewArea');
+            
+            if (!selectedUni) {
+                overviewArea.textContent = 'Select a university to view its overview.';
+                return;
+            }
+            
+            // Load the overview file
+            const fileName = `data/${selectedUni}-overview.txt`;
+            
+            fetch(fileName)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('File not found');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    overviewArea.textContent = data;
+                })
+                .catch(error => {
+                    overviewArea.textContent = `Error loading overview for ${selectedUni}: ${error.message}`;
+                });
+        });
+    </script>
+</body>
+</html>
